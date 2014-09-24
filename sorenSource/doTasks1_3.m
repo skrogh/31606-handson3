@@ -112,7 +112,6 @@ h1 = plot( F(1:end/2), mag2db(abs(Y(1:floor(end/2)))) );
 hold on
 axis( [ 0 4500 -150 -30 ] );
 h2 = stem( F_(1:end/2), mag2db( abs( synFreq(1:floor(end/2)) )*2 ), 'r' );
-
 %setting some cosmetics
 set(h1, 'linewidth',1)
 set(h2, 'linewidth',1)
@@ -127,7 +126,7 @@ saveas(gcf,'./pics/1_3_zpph_fft.eps','psc2')
 
 [ synTime, T ] = spect2time( synFreq, pianoFs, 2 );
 % * Plot time signal from 0s to 1s
-figure('Name','fig:1_3_zpph_fft','Position',[400 300 1000 400])
+figure('Name','fig:1_3_zpph_time','Position',[400 300 1000 400])
 % define papersize for export
 set(gcf,'paperunits','centimeters','Paperposition',[0 0 10 4])
 % make plot
@@ -142,9 +141,9 @@ title('synthesized signal from 0.95s - 1s with perfect harmonics and zero-phase'
 xlabel('time / s')
 ylabel('amplitude / a.u.')
 %save
-saveas(gcf,'./pics/1_3_1s.eps','psc2')
+saveas(gcf,'./pics/1_3_zpph_time.eps','psc2')
 
-break
+
 
 % * generate with correct for all signals
 % generate frequency and phase vectors
@@ -153,19 +152,26 @@ amplVect = Y( peakIndex );
 
 [ synFreq, F_ ] = generateSpectrum( f_0:f_0:f_0*length(freqVect)-f_0, amplVect, 1/100, pianoFs );
 
-figure(5)
-subplot(2,1,1)
-plot( F(1:end/2), mag2db(abs(Y(1:end/2))) )
-hold on
-stem( F_(1:end/2), mag2db( abs( synFreq(1:end/2) )*2 ), 'r' );
-axis tight
-
-subplot(2,1,2)
+% make plots
 [ synTime, T ] = spect2time( synFreq, pianoFs, 2 );
-plot( T, real(synTime) );
-hold on
-plot( T, imag(synTime), 'r' );
+% * Plot time signal from 0s to 1s
+figure('Name','fig:1_3_nzpph_time','Position',[400 300 1000 400])
+% define papersize for export
+set(gcf,'paperunits','centimeters','Paperposition',[0 0 10 4])
+% make plot
+h1 = plot( T, [ real(synTime), imag(synTime) ] );
+%setting some cosmetics
+set(h1, 'linewidth',1)
+set(gca,'Fontsize',10)
 axis tight
+xlim( [ 0.95 1 ] )
+% add labels
+title('synthesized signal from 0.95s - 1s with perfect harmonics and non-zero-phase')
+xlabel('time / s')
+ylabel('amplitude / a.u.')
+%save
+saveas(gcf,'./pics/1_3_nzpph_time.eps','psc2')
+
 
 %% bonus
 % * generate with phase 0 for all signals
@@ -178,7 +184,7 @@ f_0 = freqVect(1)
 
 [ synFreq, F_ ] = generateSpectrum( freqVect, amplVect, 1/100, pianoFs );
 
-figure(6)
+figure(11)
 subplot(2,1,1)
 plot( F(1:end/2), mag2db(abs(Y(1:end/2))) )
 hold on
@@ -199,19 +205,43 @@ amplVect = Y( peakIndex );
 
 [ synFreq, F_ ] = generateSpectrum( freqVect, amplVect, 1/100, pianoFs );
 
-figure(7)
-subplot(2,1,1)
-plot( F(1:end/2), mag2db(abs(Y(1:end/2))) )
+% * Plot time signal from 0s to 1s
+figure('Name','fig:1_3_nzpih_fft','Position',[400 300 1000 400])
+% define papersize for export
+set(gcf,'paperunits','centimeters','Paperposition',[0 0 10 4])
+% make plot
+h1 = plot( F(1:end/2), mag2db(abs(Y(1:floor(end/2)))) );
 hold on
-stem( F_(1:end/2), mag2db( abs( synFreq(1:end/2) )*2 ), 'r' );
+axis( [ 0 4500 -150 -30 ] );
+h2 = stem( F_(1:end/2), mag2db( abs( synFreq(1:floor(end/2)) )*2 ), 'r' );
+%setting some cosmetics
+set(h1, 'linewidth',1)
+set(h2, 'linewidth',1)
+set(gca,'Fontsize',10)
+% add labels
+title('spectrum of original piano note and synthesized note with imperfect harmonics')
+xlabel('frequency / Hz')
+ylabel('amplitude / dB')
+%save
+saveas(gcf,'./pics/1_3_nzpih_fft.eps','psc2')
+
+
+[ synTime, T ] = spect2time( synFreq, pianoFs, 10 );
+% * Plot time signal from 0s to 1s
+figure('Name','fig:1_3_nzpih_time','Position',[400 300 1000 400])
+% define papersize for export
+set(gcf,'paperunits','centimeters','Paperposition',[0 0 10 4])
+% make plot
+h1 = plot( T, [ real(synTime), imag(synTime) ] );
+%setting some cosmetics
+set(h1, 'linewidth',1)
+set(gca,'Fontsize',10)
 axis tight
+xlim( [ 0.25 0.5 ] )
+% add labels
+title('synthesized signal from 0.25s - 0.5s with imperfect harmonics and zero-phase')
+xlabel('time / s')
+ylabel('amplitude / a.u.')
+%save
+saveas(gcf,'./pics/1_3_nzpih_time.eps','psc2')
 
-subplot(2,1,2)
-[ synTime, T ] = spect2time( synFreq, pianoFs, 2 );
-plot( T, real(synTime) );
-hold on
-plot( T, imag(synTime), 'r' );
-axis tight
-
-
-sum(abs(Y).^2) / sum(abs(synFreq).^2) 

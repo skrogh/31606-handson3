@@ -124,7 +124,16 @@
 \begin{figure}[hb!]
 \centering
 \includegraphics[width={#1}\textwidth]{#2}
-\caption{#3} \label{#4}
+\caption{#3}
+\label{#4}
+\end{figure}
+}
+\newcommand\stdfignoscale[4]{ img,cap,lab
+\begin{figure}[hb!]
+\centering
+\includegraphics{#1}
+\caption{#2}
+\label{#3}
 \end{figure}
 }
 \newcommand\diff{\dot}
