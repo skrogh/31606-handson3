@@ -43,9 +43,9 @@ saveas(gcf,'./pics/1-3-period.eps','psc2')
 % * Plot spectrum of whole signal on double log axis
 [ Y, F ] = make_spectrum( piano, pianoFs );
 % normalize fft
-Y = Y / length(Y) * 2;
+Y = Y * 2;
 
-% * Plot time signal from 0s to 1s
+% * Plot spectrum log
 figure('Name','fig:1-3-log','Position',[0 0 1500 500])
 % define papersize for export
 set(gcf,'paperunits','centimeters','Paperposition',[0 0 15 5])
@@ -62,7 +62,7 @@ ylabel('amplitude / dB')
 %save
 saveas(gcf,'./pics/1-3-log.eps','psc2')
 
-% * Plot time signal from 0s to 1s
+% * Plot spectrum lin
 figure('Name','fig:1-3-lin','Position',[0 0 1500 500])
 % define papersize for export
 set(gcf,'paperunits','centimeters','Paperposition',[0 0 15 5])
@@ -103,7 +103,7 @@ f_0 = freqVect(1)
 
 [ synFreq, F_ ] = generateSpectrum( f_0:f_0:f_0*length(freqVect)-f_0, amplVect, f_0/10, pianoFs );
 
-% * Plot time signal from 0s to 1s
+% * Plot perfect harmonics
 figure('Name','fig:1-3-zpph_fft','Position',[0 0 1500 500])
 % define papersize for export
 set(gcf,'paperunits','centimeters','Paperposition',[0 0 15 5])
@@ -125,7 +125,7 @@ saveas(gcf,'./pics/1-3-zpph_fft.eps','psc2')
 
 
 [ synTime, T ] = spect2time( synFreq, pianoFs, 2 );
-% * Plot time signal from 0s to 1s
+% * Plot perfect harmonics, time domain
 figure('Name','fig:1-3-zpph_time','Position',[0 0 1500 500])
 % define papersize for export
 set(gcf,'paperunits','centimeters','Paperposition',[0 0 15 5])
@@ -154,7 +154,7 @@ amplVect = Y( peakIndex );
 
 % make plots
 [ synTime, T ] = spect2time( synFreq, pianoFs, 2 );
-% * Plot time signal from 0s to 1s
+% * Plot perfect harminics with phase, time domain
 figure('Name','fig:1-3-nzpph_time','Position',[0 0 1500 500])
 % define papersize for export
 set(gcf,'paperunits','centimeters','Paperposition',[0 0 15 5])
@@ -205,7 +205,7 @@ amplVect = Y( peakIndex );
 
 [ synFreq, F_ ] = generateSpectrum( freqVect, amplVect, 1/100, pianoFs );
 
-% * Plot time signal from 0s to 1s
+% * Plot imperfect harmonics, spectrum
 figure('Name','fig:1-3-nzpih_fft','Position',[0 0 1500 500])
 % define papersize for export
 set(gcf,'paperunits','centimeters','Paperposition',[0 0 15 5])
@@ -227,7 +227,7 @@ saveas(gcf,'./pics/1-3-nzpih_fft.eps','psc2')
 
 
 [ synTime, T ] = spect2time( synFreq, pianoFs, 10 );
-% * Plot time signal from 0s to 1s
+% * Plot imperfect harmonics, time domain
 figure('Name','fig:1-3-nzpih_time','Position',[0 0 1500 500])
 % define papersize for export
 set(gcf,'paperunits','centimeters','Paperposition',[0 0 15 5])
