@@ -1,4 +1,4 @@
-function [Y, freq] = spectrum(X, fs); 
+function [Y, freq] = spectrum(X, fs)
 %INPUT: Signal (X), sampling frequency (fs). OUTPUT: FFT (Y), frequency vector (freq).
 Y = fft(X);         %compute spectrum
 Y = 2*Y/length(Y);  %physical scaling

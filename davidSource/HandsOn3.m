@@ -9,7 +9,7 @@ clc
 [test_spectrum, freq] = spectrum(test_signal, 4000);
 test_spectrum = test_spectrum/2; %Scaling for both positive and negative
 
-plot(fftshift(freq), to_dB(abs(fftshift(test_spectrum))))
+plot(fftshift(freq), mag2db(abs(fftshift(test_spectrum))))
 ylim([-100 25]);
 title('Test Sinusoid at 1kHz')
 xlabel('Frequency [Hz]')
@@ -73,7 +73,7 @@ ylabel('Imaginary Part [-]')
 figure
 
 subplot(2,1,1);
-semilogx(freq, to_dB(abs(S)));
+semilogx(freq, mag2db(abs(S)));
 hold on
 plot(f0, 0, 'or', 'MarkerSize', 5);
 xlim([0 200000]);
@@ -129,7 +129,7 @@ title('Piano.wav (Time Domain)')
 
 subplot(2,2,2);
 %Plot piano spectrum doublelog
-plot(freq(1:length(freq)/2), to_dB(abs(S(1:length(freq)/2))));
+plot(freq(1:length(freq)/2), mag2db(abs(S(1:length(freq)/2))));
 xlim([0 2.25*10^4]);
 xlabel('Frequency [Hz]')
 ylabel('Magnitude [dB]')
@@ -137,7 +137,7 @@ title('Piano.wav (Frequency Domain)')
 
 subplot(2,2,3);
 %Plot piano spectrum 
-plot(freq(1:length(freq)/2), to_dB(abs(S(1:length(freq)/2))));
+plot(freq(1:length(freq)/2), mag2db(abs(S(1:length(freq)/2))));
 xlim([0 500]);
 xlabel('Frequency [Hz]')
 ylabel('Magnitude [dB]')
@@ -145,7 +145,7 @@ title('Piano.wav (Frequency Domain)')
 
 subplot(2,2,4);
 %Plot piano spectrum
-plot(freq(1:length(freq)/2), to_dB(abs(S(1:length(freq)/2))));
+plot(freq(1:length(freq)/2), mag2db(abs(S(1:length(freq)/2))));
 xlim([130 131]);
 xlabel('Frequency [Hz]')
 ylabel('Magnitude [dB]')
@@ -179,7 +179,7 @@ Q = Q*length(Q);
 figure
 
 subplot(2,1,1);
-plot(fftshift(freq),fftshift(to_dB(abs(Y))))
+plot(fftshift(freq),fftshift(mag2db(abs(Y))))
 xlabel('Frequency [Hz]')
 ylabel('Magnitude [dB]')
 title('Synthesized piano (Frequency Domain)')
@@ -218,7 +218,7 @@ xlabel('Frequency [Hz]')
 ylabel('Amplitude [-]')
 
 subplot(2,1,2);
-semilogx(fftshift(freq(1:fs/2)), fftshift(to_dB(abs(b_spectrum(1:fs/2)))))
+semilogx(fftshift(freq(1:fs/2)), fftshift(mag2db(abs(b_spectrum(1:fs/2)))))
 title('B-Spline of length 6 order 3')
 xlabel('Frequency [Hz]')
 ylabel('Amplitude [dB]')
@@ -299,17 +299,17 @@ p = legend('n = 0','n = 1','n = 2','n = 3','n = 4','n = 5','n = 6');
 set(p,'FontSize', 8);
 
 subplot(3,1,3);
-semilogx(fftshift(freq(1:fs/2)), fftshift(to_dB(abs(b_0s(1:fs/2)))), 'Color', [1.0 0 0.0], 'LineWidth', 1)
+semilogx(fftshift(freq(1:fs/2)), fftshift(mag2db(abs(b_0s(1:fs/2)))), 'Color', [1.0 0 0.0], 'LineWidth', 1)
 hold on
-semilogx(fftshift(freq(1:fs/2)), fftshift(to_dB(abs(b_1s(1:fs/2)))), 'Color', [0.8 0 0.2], 'LineWidth', 1)
+semilogx(fftshift(freq(1:fs/2)), fftshift(mag2db(abs(b_1s(1:fs/2)))), 'Color', [0.8 0 0.2], 'LineWidth', 1)
 hold on
-semilogx(fftshift(freq(1:fs/2)), fftshift(to_dB(abs(b_2s(1:fs/2)))), 'Color', [0.6 0 0.4], 'LineWidth', 1)
+semilogx(fftshift(freq(1:fs/2)), fftshift(mag2db(abs(b_2s(1:fs/2)))), 'Color', [0.6 0 0.4], 'LineWidth', 1)
 hold on
-semilogx(fftshift(freq(1:fs/2)), fftshift(to_dB(abs(b_3s(1:fs/2)))), 'Color', [0.4 0 0.6], 'LineWidth', 1)
+semilogx(fftshift(freq(1:fs/2)), fftshift(mag2db(abs(b_3s(1:fs/2)))), 'Color', [0.4 0 0.6], 'LineWidth', 1)
 hold on
-semilogx(fftshift(freq(1:fs/2)), fftshift(to_dB(abs(b_4s(1:fs/2)))), 'Color', [0.2 0 0.8], 'LineWidth', 1)
+semilogx(fftshift(freq(1:fs/2)), fftshift(mag2db(abs(b_4s(1:fs/2)))), 'Color', [0.2 0 0.8], 'LineWidth', 1)
 hold on
-semilogx(fftshift(freq(1:fs/2)), fftshift(to_dB(abs(b_5s(1:fs/2)))), 'Color', [0.0 0 1.0], 'LineWidth', 1)
+semilogx(fftshift(freq(1:fs/2)), fftshift(mag2db(abs(b_5s(1:fs/2)))), 'Color', [0.0 0 1.0], 'LineWidth', 1)
 hold on
 ylim([-150 0])
 xlim([10^2 3*10^4]);
@@ -332,7 +332,7 @@ figure
 s_original = s;
 [s_original_spectrum, freq] = spectrum(s_original, fs);
 subplot(2,1,1);
-semilogx(freq(1:end-1), to_dB(abs(s_original_spectrum)));
+semilogx(freq(1:end-1), mag2db(abs(s_original_spectrum)));
 set(gca,'XTick', logspace(-1,4,6));
 title('Original signal')
 xlim([0 3*10^4]);
@@ -343,7 +343,7 @@ ylabel('Amplitude [dB]')
 s_filtered = conv(b_lowpass, s);
 [s_filtered_spectrum, freq] = spectrum(s_filtered, fs);
 subplot(2,1,2);
-semilogx(freq(1:end-1), to_dB(abs(s_filtered_spectrum)));
+semilogx(freq(1:end-1), mag2db(abs(s_filtered_spectrum)));
 set(gca,'XTick', logspace(-1,4,6));
 %plot(freq(1:end-1), abs(s_filtered_spectrum));
 title('Filtered signal')
@@ -363,7 +363,7 @@ figure
 s_f = conv(b_lowpass, s);
 [s_f_spectrum, freq] = spectrum(s_f, fs);
 subplot(2,2,1);
-semilogx(freq(1:end-1), to_dB(abs(s_f_spectrum)));
+semilogx(freq(1:end-1), mag2db(abs(s_f_spectrum)));
 set(gca,'XTick', logspace(0,4,5));
 xlim([0 3*10^4]);
 ylim([-450 -25]);
@@ -375,7 +375,7 @@ ylabel('Amplitude [dB]')
 s_fd = downsample(s_f, 7);
 [s_fd_spectrum, freq] = spectrum(s_fd, fs);
 subplot(2,2,2);
-semilogx(freq(1:end-1), to_dB(abs(s_fd_spectrum)));
+semilogx(freq(1:end-1), mag2db(abs(s_fd_spectrum)));
 set(gca,'XTick', logspace(0,4,5));
 xlim([0 3*10^4]);
 ylim([-175 -25]);
@@ -387,7 +387,7 @@ ylabel('Amplitude [dB]')
 s_fdu = reshape(ones(7,1)*s_fd(:)', length(s_fd)*7, 1);
 [s_fdu_spectrum, freq] = spectrum(s_fdu, 44100);
 subplot(2,2,3);
-semilogx(freq(1:end-1), to_dB(abs(s_fdu_spectrum)));
+semilogx(freq(1:end-1), mag2db(abs(s_fdu_spectrum)));
 set(gca,'XTick', logspace(0,4,5));
 xlim([0 3*10^4]);
 ylim([-450 -25]);
@@ -400,7 +400,7 @@ b_reconstruct = Bspline(6,5);
 s_fdur = conv(b_reconstruct, s_fdu);
 [s_fdur_spectrum, freq] = spectrum(s_fdur, 44100);
 subplot(2,2,4);
-semilogx(freq(1:end-1), to_dB(abs(s_fdur_spectrum)));
+semilogx(freq(1:end-1), mag2db(abs(s_fdur_spectrum)));
 set(gca,'XTick', logspace(0,4,5));
 xlim([0 3*10^4]);
 ylim([-450 -25]);
