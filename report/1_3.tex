@@ -13,12 +13,23 @@ numbers=none]
 
 \subsubsection{ Original signal, time domain }
 First we plot one second (from 0s-1s) of the original signal in the time domain
-(\ref{fig:1_3_1s}).
+(\ref{fig:1-3-1s}).
 A plot of the signal zoopmed in on a few periods is also provided in
-(\ref{fig:1_3_period})
+(\ref{fig:1-3-period})
 
-% plots goes here
-% plots goes here
+\begin{figure}
+	\center
+	\includegraphics{1-3-1s}
+	\caption{ Waveform of a piano note }
+	\label{fig:1-3-1s}
+\end{figure}
+
+\begin{figure}
+	\center
+	\includegraphics{1-3-period}
+	\caption{ Zoom of piano note waveform }
+	\label{fig:1-3-period}
+\end{figure}
 
 \subsubsection{ Original signal, frequency domain }
 Using the previously described function \emph{make\_spectrum} we calculate the
@@ -35,12 +46,25 @@ Y = Y / length(Y) * 2;
 
 We then plot the spectrum of the positive
 frequencies with magnitude in dB on the y axis and frequency in Hz on the x axis. Two plots are provided, one with
-logarithmic x axis (\ref{fig:1_3_log}) and one with linear x axis
-(\ref{fig:1_3_lin}). In (\ref{fig:1_3_lin}) we see how the overtones are almost
+logarithmic x axis (\ref{fig:1-3-log}) and one with linear x axis
+(\ref{fig:1-3-lin}). In (\ref{fig:1-3-lin}) we see how the overtones are almost
 equally spaced.
 
-% plots goes here
-% plots goes here
+\begin{figure}
+	\center
+	\includegraphics{1-3-log}
+	\caption{ Spectrum of a piano note with a logarithmic frequency
+axis }
+	\label{fig:1-3-log}
+\end{figure}	
+
+\begin{figure}
+	\center
+	\includegraphics{1-3-lin}
+	\caption{ Spectrum of a piano note with a linear frequency
+axis. Notice how the harmonics are almost equally spaced }
+	\label{fig:1-3-lin}
+\end{figure}
 
 \subsubsection{ Extracting frequency at peak magnitudes }
 By plotting the spectrum with magnitude along y axis and inde along x axis, one
@@ -92,31 +116,6 @@ style=Matlab-editor,
 basicstyle=\ttfamily\footnotesize,
 numbers=left]
 function [ synFreq, F ] = generateSpectrum( freqVect, amplVect, dF, fs )
-%GENERATE_SPECTRUM genereates the spectrum from a list of frequencies and
-%amplitudes that fits the best into the spectrum of resolution dF
-%   freqVect and amplVect is the frequency and amplitude vectors
-%   dF is the desired spectrum resolution
-%   fs is the sample frequency
-
-% choose nearest dF, that gives an integer number of samples:
-dF =  fs / round(fs/dF);
-
-% generate a vector of zeros for us to set the magnitudes in:
-synFreq = zeros( round(fs/dF), 1 );
-
-% set bin value for the bin closest to each specified frequency:
-for i = 1:length(freqVect)
-    % positive frequency
-    synFreq( 1 + round((freqVect(i))/dF) ) = amplVect( i )/2;
-    % negative frequency
-    synFreq( end + 1 - round((freqVect(i))/dF) ) = conj(amplVect( i )/2);
-end
-
-% genreate frequeny vector
-F = ( 0 : dF : fs - dF )';
-F(ceil(end/2)+1:end) = F(ceil(end/2)+1:end) - fs;
-
-end
 \end{lstlisting}
 
 We also costruct a wrapper function for generating the time signal from a
@@ -126,22 +125,7 @@ function [ synTime, T ] = spect2time( synFreq, fs, len )
 style=Matlab-editor,
 basicstyle=\ttfamily\footnotesize,
 numbers=left]
-%SPECT2TIME Genreates a timeseries signal from spectrum synFreq and
-%   extends/truncates to length
-
-synFreq = synFreq*length(synFreq);
-
-% generate time signal
-synTime = ifft( synFreq );
-
-% resize signal
-synTime = repmat( synTime, ceil( fs*len/length(synTime) ), 1 );
-synTime = synTime(1:fs*len);
-
-%genreate time vector
-T = 0:1/fs:length(synTime)/fs-1/fs;
-
-end
+function [ synTime, T ] = spect2time( synFreq, fs, len )
 \end{lstlisting}
 
 We are now ready to resynthesize the signal in the time domain.
@@ -161,31 +145,75 @@ The magnitude vector is given by the absolute of each of the original
 magnitudes.
 
 Again we plot a couple of periods of the signal. This is done in
-(\ref{fig:1_3_zpph_time}). We also plot the spectrum of both the synthesized
+(\ref{fig:1-3-zpph_time}). We also plot the spectrum of both the synthesized
 signal an the original signal from 0 to 4500Hz to compare them in
-(\ref{fig:1_3_zpph_fft}). You can see that after the first ~10 harmonics, the
+(\ref{fig:1-3-zpph_fft}). You can see that after the first ~10 harmonics, the
 frequency of the synthesized harmonics and the original starts to deviate. This
 is note simply a result of choosing $f_0$ with too low resolution, but the
 harmonics actually aren't perfect.
 
+\begin{figure}
+	\center
+	\includegraphics{1-3-zpph_fft}
+	\caption{ Original spectrum overlayed i with synthesized
+spectrum for perfect harmonics. Notice how the overtones aren't perfect
+harmonics }
+	\label{fig:1-3-zpph_fft}
+\end{figure}
+
+\begin{figure}
+	\center
+	\includegraphics{1-3-zpph_time}
+	\caption{ Zoom on the synthesized signal, assuming perfect
+harmonics and same phase for all overtones }
+	\label{fig:1-3-zpph_time}
+\end{figure}
+
+
 \paragraph{ Resynthesis with correct phase and perfect harmony }
 We then resynthezise in the same manner, but using the complex magnitude.
 A couple of periods of the signal can be seen in
-(\ref{fig:1_3_nzpph_time})
+(\ref{fig:1-3-nzpph_time})
 
 Listening to the two signals, there is a sligt difference.
 The signal with complex magnitude sounds slightly more nasal and perhaps a bit
 closer to the original.
 
+\begin{figure}
+	\center
+	\includegraphics{1-3-nzpph_time}
+	\caption{ Zoom on the synthesized signal, assuming
+ perfect harmonics and correct phase for the overtones. }
+	\label{fig:1-3-nzpph_time}
+\end{figure}
+
 \paragraph{ Resynthesis with correct phase and imperfect harmony }
 To get even closer to the real piano we also have to recreate the slight beating
-produced by the harmonics not being perfectly multiples of $f_0$
+produced by the harmonics not being perfectly multiples of $f_0$,
+this is done using the original frequency vector (\emph{freqVect}) and complex
+phase vector. In (\ref{fig:1-3-nzpih_fft}) we see how the spectrum of the
+synthesized signal now matches the original.
 
-This is done using the original frequency vector (\emph{freqVect}) and complex
-phase vector.
-
-In (\ref{fig:1_3_nzpih}) we see how the waveform changes slightly over time.
+In (\ref{fig:1-3-nzpih_time}) we see how the waveform changes slightly over
+time.
 Playing this file, we can hear that it is even closer, as it has got some of the
 ``life'' back, pulsing slightly. Now all we need is an envelope generator to
 recreate the onset of the note.
 
+\begin{figure}
+	\center
+	\includegraphics{1-3-nzpih_fft}
+	\caption{ Original spectrum overlayed i with synthesized
+spectrum. Notice how the synthesized overtones now overlap with the original
+overtones. }
+	\label{fig:1-3-nzpih_fft}
+\end{figure}
+
+\begin{figure}
+	\center
+	\includegraphics{1-3-nzpih_time}
+	\caption{ Synthesized signal with
+non-harmonic overtones. Notice how the shape of the
+waveform changes over time }
+	\label{fig:1-3-nzpih_time}
+\end{figure}
